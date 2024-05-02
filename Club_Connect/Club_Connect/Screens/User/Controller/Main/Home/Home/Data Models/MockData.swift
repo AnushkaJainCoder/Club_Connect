@@ -22,7 +22,7 @@ struct MockData {
 //           let recommendedEvents = recommendedEventsManager.getRecommendedEvents()
            
            let recommendedEvents = recommendedEventsManager.fetchLatestEvents(forCategory: ["sports","tech"])
-           let listItems = recommendedEvents.map { ListItem(title: $0.eventName, image: $0.image, datee: nil, other: nil) }
+           let listItems = recommendedEvents.map { ListItem(title: $0.eventName, image: $0.image, datee: nil, other: nil, desc: $0.description) }
            return .recommended(listItems)
        }
 
@@ -48,7 +48,7 @@ struct MockData {
         var  eventsThisWeekManagerInstance = eventsThisWeekManager
         let eventsThisWeek = eventsThisWeekManagerInstance.fetchEventDataForThisWeek()
 
-        let listItems = eventsThisWeek.map { ListItem(title: $0.eventName, image: $0.image, datee: $0.eventDate, other: $0.clubName) }
+        let listItems = eventsThisWeek.map { ListItem(title: $0.eventName, image: $0.image, datee: $0.eventDate, other: $0.clubName, desc:  $0.description) }
         return .eventsThisWeek(listItems)
     }
     
@@ -59,7 +59,7 @@ struct MockData {
         
         private var recommendedClubs: ListSection {
             let clubs = recommendedClubsManager.getRecomClubs()
-            let listItems = clubs.map { ListItem( title: nil, image: $0.image, datee: nil, other: nil) }
+            let listItems = clubs.map { ListItem( title: nil, image: $0.image, datee: nil, other: nil, desc: $0.desc) }
             return .recClubs(listItems)
         }
     

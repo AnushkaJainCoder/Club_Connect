@@ -7,6 +7,8 @@
 import UIKit
 
 class HomeViewController: UIViewController {
+   
+    
     @IBOutlet weak var scannerButton: UIBarButtonItem!
     @IBOutlet weak var collectionView: UICollectionView!
     
@@ -23,11 +25,18 @@ class HomeViewController: UIViewController {
     var currentIndex = 0
     var index = 0
    
+    private let searchViewController: UISearchController = {
+        let controller = UISearchController(searchResultsController: nil)
+        return controller
+    }()
+    
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        navigationItem.searchController = searchViewController
+        navigationItem.hidesSearchBarWhenScrolling = true
         print(sections.count)
-        
+//        view.addSubview(searchViewController)
         
 //        if let navigationBar = self.navigationController?.navigationBar {
 //            let firstFrame = CGRect(x: 120, y: 26, width: navigationBar.frame.width/2, height: navigationBar.frame.height)
@@ -44,11 +53,65 @@ class HomeViewController: UIViewController {
         
        
         Timer.scheduledTimer(timeInterval: 3, target: self, selector: #selector(scrollinsetUp), userInfo: nil, repeats: true)
+        
+        
         collectionView.collectionViewLayout = createLayout()
         
         
        
 
+    }
+    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
+        if segue.identifier == "ShowDetailsSegue" {
+                // Check if the destination view controller is the one you want
+                if let destinationVC = segue.destination as? EventInfoViewController {
+                    // Check if the sender is a UICollectionViewCell
+                    if let cell = sender as? UICollectionViewCell {
+                        // Get the indexPath of the selected cell
+                        if let indexPath = collectionView.indexPath(for: cell) {
+                            // Get the data for the selected item
+                            switch sections[indexPath.section] {
+                            case .recommended(let items):
+                                let selectedItem = items[indexPath.item]
+                                // Pass the selected item to the destination view controller
+                                destinationVC.selectedItem = selectedItem
+                                break
+                            case .eventsThisWeek(let items):
+                                let selectedItem = items[indexPath.item]
+                                // Pass the selected item to the destination view controller
+                                destinationVC.selectedItem = selectedItem
+                                break
+                            default:
+                                break
+                            }
+                        }
+                    }
+                }
+            
+            }
+        if segue.identifier == "ShowDetailsSeguesa" {
+                // Check if the destination view controller is the one you want
+                if let destinationVC = segue.destination as? ClubInfoViewController {
+                    // Check if the sender is a UICollectionViewCell
+                    if let cell = sender as? UICollectionViewCell {
+                        // Get the indexPath of the selected cell
+                        if let indexPath = collectionView.indexPath(for: cell) {
+                            // Get the data for the selected item
+                            switch sections[indexPath.section] {
+                            
+                            case .recClubs(let items):
+                                let selectedItem = items[indexPath.item]
+                                // Pass the selected item to the destination view controller
+                                destinationVC.selectedItem = selectedItem
+                                break
+                            default:
+                                break
+                            }
+                        }
+                    }
+                }
+            
+            }
     }
     
     @objc func scrollinsetUp(){
@@ -109,7 +172,7 @@ class HomeViewController: UIViewController {
             switch section {
             case .recommended:
                 let item = NSCollectionLayoutItem(layoutSize: NSCollectionLayoutSize(widthDimension: .fractionalWidth(1), heightDimension: .fractionalHeight(1)))
-                let group = NSCollectionLayoutGroup.horizontal(layoutSize: NSCollectionLayoutSize(widthDimension: .fractionalWidth(1), heightDimension: .fractionalHeight(0.4)), subitems: [item])
+                let group = NSCollectionLayoutGroup.horizontal(layoutSize: NSCollectionLayoutSize(widthDimension: .fractionalWidth(1), heightDimension: .fractionalHeight(0.3)), subitems: [item])
                 let section = NSCollectionLayoutSection(group: group)
                 section.orthogonalScrollingBehavior = .continuous
                 section.interGroupSpacing = 15
@@ -121,7 +184,7 @@ class HomeViewController: UIViewController {
             case .eventsThisWeek:
 //            case .eventsThisWeek:
                 let item = NSCollectionLayoutItem(layoutSize: NSCollectionLayoutSize(widthDimension: .fractionalWidth(0.5), heightDimension: .fractionalHeight(1)))
-                let group = NSCollectionLayoutGroup.horizontal(layoutSize: NSCollectionLayoutSize(widthDimension: .fractionalWidth(1), heightDimension: .fractionalHeight(0.28)), subitems: [item])
+                let group = NSCollectionLayoutGroup.horizontal(layoutSize: NSCollectionLayoutSize(widthDimension: .fractionalWidth(1), heightDimension: .fractionalHeight(0.2)), subitems: [item])
                 let section = NSCollectionLayoutSection(group: group)
                // section.orthogonalScrollingBehavior = .continuous // Disable continuous scrolling
                 section.interGroupSpacing = 20
@@ -133,10 +196,10 @@ class HomeViewController: UIViewController {
             case .recClubs:
                 
                 let item = NSCollectionLayoutItem(layoutSize: NSCollectionLayoutSize(widthDimension: .fractionalWidth(1), heightDimension: .fractionalHeight(1)))
-                let group = NSCollectionLayoutGroup.horizontal(layoutSize: NSCollectionLayoutSize(widthDimension: .fractionalWidth(1), heightDimension: .fractionalHeight(0.25)), subitems: [item])
+                let group = NSCollectionLayoutGroup.horizontal(layoutSize: NSCollectionLayoutSize(widthDimension: .fractionalWidth(1), heightDimension: .fractionalHeight(0.18)), subitems: [item])
                 let section = NSCollectionLayoutSection(group: group)
                 section.orthogonalScrollingBehavior = .continuous
-                section.interGroupSpacing = 5
+              //  section.interGroupSpacing = 5
                 section.contentInsets = NSDirectionalEdgeInsets(top: 0, leading: 10, bottom: 0, trailing: 10)
                 section.boundarySupplementaryItems = [self.supplementaryHeaderItem()]
                 section.supplementariesFollowContentInsets = false

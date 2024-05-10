@@ -1,112 +1,64 @@
-//
-//  MockData.swift
-//  Club_Connect
-//
-//  Created by student on 25-04-2024.
-//
-
 import Foundation
-
-
-import Foundation
-import UIKit
 
 struct MockData {
+    // MARK: - Properties
+    
+    // Singleton instance
     static let shared = MockData()
-
-       private var recommendedEventsManager: EventDataManager {
-           return EventDataManager()
-       }
-
-       private var recommended: ListSection {
-//           let recommendedEvents = recommendedEventsManager.getRecommendedEvents()
-           
-           let recommendedEvents = recommendedEventsManager.fetchLatestEvents(forCategory: ["sports","tech"])
-           let listItems = recommendedEvents.map { ListItem(title: $0.eventName, image: $0.image, datee: nil, other: nil) }
-           return .recommended(listItems)
-       }
-
-    func fetchImageRec() -> [String]{
-        
-        let recEvents = recommendedEventsManager.fetchLatestEvents(forCategory: ["sports","tech"])
-        let images = recEvents.compactMap{$0.image}
-        print(images.count)
-        
-        return images
-        
-    }
-
-        
     
-    
-    private var eventsThisWeekManager: EventDataManager{
+    // Manager for recommended events
+    private var recommendedEventsManager: EventDataManager {
         return EventDataManager()
     }
     
+    // Manager for events happening this week
+    private var eventsThisWeekManager: EventDataManager {
+        return EventDataManager()
+    }
+    
+    // Manager for recommended clubs
+    private var recommendedClubsManager: RecommendedClubManager {
+        return RecommendedClubManager()
+    }
+    
+    // MARK: - Methods
+    
+    // Fetches images of recommended events
+    func fetchImageRec() -> [String] {
+        let recEvents = recommendedEventsManager.fetchLatestEvents(forCategory: ["sports", "tech"])
+        let images = recEvents.compactMap { $0.image }
+        print(images.count)
+        return images
+    }
+    
+    // MARK: - Sections
+    
+    // Recommended events section
+    private var recommended: ListSection {
+        let recommendedEvents = recommendedEventsManager.fetchLatestEvents(forCategory: ["sports", "tech"])
+        let listItems = recommendedEvents.map { ListItem(title: $0.eventName, image: $0.image, datee: nil, other: nil, desc: $0.description) }
+        return .recommended(listItems)
+    }
+    
+    // Events happening this week section
     private var eventsThisWeek: ListSection {
-        
-        var  eventsThisWeekManagerInstance = eventsThisWeekManager
+        var eventsThisWeekManagerInstance = eventsThisWeekManager
         let eventsThisWeek = eventsThisWeekManagerInstance.fetchEventDataForThisWeek()
-
-        let listItems = eventsThisWeek.map { ListItem(title: $0.eventName, image: $0.image, datee: $0.eventDate, other: $0.clubName) }
+        let listItems = eventsThisWeek.map { ListItem(title: $0.eventName, image: $0.image, datee: $0.eventDate, other: $0.clubName, desc:  $0.description) }
         return .eventsThisWeek(listItems)
     }
     
+    // Recommended clubs section
+    private var recommendedClubs: ListSection {
+        let clubs = recommendedClubsManager.getRecomClubs()
+        let listItems = clubs.map { ListItem( title: $0.cname, image: $0.image, datee: nil, other: nil, desc: $0.desc) }
+        return .recClubs(listItems)
+    }
     
-    private var recommendedClubsManager: RecommendedClubManager {
-            return RecommendedClubManager()
-        }
-        
-        private var recommendedClubs: ListSection {
-            let clubs = recommendedClubsManager.getRecomClubs()
-            let listItems = clubs.map { ListItem( title: nil, image: $0.image, datee: nil, other: nil) }
-            return .recClubs(listItems)
-        }
+    // MARK: - Page Data
     
-//
-
-//    private let eventsThisWeek: ListSection = {
-        
-        
-        
-        
-        
-        
-        
-//        .eventsThisWeek([
-            
-            
-            
-//            ListItems(eventName: "JustDance", dates: "8th April", clubName: "Panache Club", image: "JustDance"),
-//            ListItems(eventName: "Dogtooth Sneakers", dates: "6th April", clubName: "Sneaker Society", image: "DogtoothSneakers"),
-//            ListItems(eventName: "JustDance", dates: "8th April", clubName: "Panache Club", image: "JustDance")
-//            ListItems(eventName: <#T##String#>, dates: <#T##String#>, clubName: <#T##String#>, image: <#T##String#>)
-            
-//            ListItem(title: "VOLLEY VENTURE", image: "sports"),
-//            
-//
-//            ListItem(title: "THE NEW BUSINESS IDEAS", image: "imag9"),
-//            ListItem(title: "THE HOUR OF <CODE> WAR ", image: "image7"),
-//            
-
-//            ListItem(title: "FUTURE OF MANAGEMENT EDU ", image: "Madhu")
-//            ListItem(title: "  JustDance\n  8th April\n  Panache Club", image: "JustDance"),
-//            
-//
-//            ListItem(title: "  Dog tooth Sneakers \n  6th April \n  Sneaker Socety", image: "DogtoothSneakers"),
-//            ListItem(title: "  JustDance\n  8th April\n  Panache Club", image: "JustDance"),
-//            
-
-//            ListItem(title: "JustDance", image: "JustDance"),
-//            ListItem(title: "Dog tooth Sneakers", image: "DogtoothSneakers"),
-//            ListItem(title: "JustDance", image: "JustDance"),
-//            ListItem(title: "Dog tooth Sneakers", image: "DogtoothSneakers"),
-            
-
-//        ])
-//    }()
-
+    // Data for all sections
     var pageData: [ListSection] {
-        return [ recommended, eventsThisWeek, recommendedClubs]
+        return [recommended, eventsThisWeek, recommendedClubs]
     }
 }

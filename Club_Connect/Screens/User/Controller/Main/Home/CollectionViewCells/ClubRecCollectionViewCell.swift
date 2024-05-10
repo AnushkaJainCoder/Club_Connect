@@ -1,25 +1,17 @@
-//
-//  ClubRecCollectionViewCell.swift
-//  Club_Connect
-//
-//  Created by student on 29-04-2024.
-//
-
 import UIKit
 
 class ClubRecCollectionViewCell: UICollectionViewCell {
+    
+    // MARK: - Outlets
+    
     @IBOutlet weak var clubImage: UIImageView!
     
-    @IBOutlet weak var exploreButton: UIButton!
+    // MARK: - Setup Method
     
     func setup(_ item: ListItem) {
-        clubImage.image = UIImage(named: item.image)
-        exploreButton.titleLabel?.font = UIFont.systemFont(ofSize: 5)
+        // Set club image
+        clubImage.image = UIImage(named: item.image ?? "")
         clubImage.layer.cornerRadius = 15
-       // exploreButton.isHidden = true
-        exploreButton.frame.size = CGSize(width: 75, height: 30)
-//        exploreButton.titleLabel?.font = UIFont.systemFont(ofSize: 2)
-        // Adjust the corner radius as needed
         clubImage.clipsToBounds = true
     }
 }

@@ -1,14 +1,7 @@
-//
-//  ClubList.swift
-//  Club_Connect
-//
-//  Created by student on 28-04-2024.
-//
-
 import Foundation
 import UIKit
 
-struct ClubList{
+struct ClubList {
     let cname: String
     let desc: String
     let members: Int
@@ -17,41 +10,29 @@ struct ClubList{
     let join: Bool
 }
 
-
-class RecommendedClubManager{
+class RecommendedClubManager {
+    private var clubs: [ClubList]
     
-    private var clubs : [ClubList]
-    init(){
+    init() {
         self.clubs = [
-        ClubList(cname: "", desc: "gfg", members: 70, category: "tech", image: "gfg", join: false),
-        
-        ClubList(cname: "", desc: "bnb", members: 50, category: "tech", image: "bnb", join:  false),
-        ClubList(cname: "", desc: "ieee", members: 60, category: "tech", image: "ieee", join: false),
-        
+            ClubList(cname: "BITS ‘N’ BYTES", desc: "BITS ’N’ BYTES has been actively organizing many events that are aimed at nurturing computer technocrats. Since the time the club has been formed, it has been computer centric and this has yielded several benefits to its members. Members have been able to get actively involved and derive significant knowledge on computers.", members: 150, category: "tech", image: "recClubs12345", join:  false),
+            ClubList(cname: "C2S2", desc: "C2S2 club is open for all students of Chitkara University, Punjab Campus. The club functions not only during the working hours of the campus, it works even when the campus working hours are over. The club intends to encourage students to learn and teach activities that interests them. The vision of C2S2 is to create a community enriched with students who are enthusiastic and are keen to learn and teach new things.", members: 60, category: "dance", image: "recClubs1", join: false)
         ]
     }
     
-    func getRecomClubs() -> [ClubList]{
-        
-        let famousClubs = clubs.sorted{
+    func getRecomClubs() -> [ClubList] {
+        let famousClubs = clubs.sorted {
             $0.members > $1.members
         }
-        print("hello\(famousClubs.count)")
-        
-        
         return famousClubs
     }
     
-    
-    
-    func getRecomClubs(forCategory Categories: [String]) -> [ClubList]{
-        
-        let filterClubs = clubs.filter{clubs in (Categories.contains(clubs.category)) && !clubs.join}.sorted{
+    func getRecomClubs(forCategory categories: [String]) -> [ClubList] {
+        let filterClubs = clubs.filter { club in
+            categories.contains(club.category) && !club.join
+        }.sorted {
             $0.members > $1.members
         }
         return filterClubs
-        
     }
-    
-    
 }

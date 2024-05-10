@@ -1,9 +1,3 @@
-//
-//  ListSection.swift
-//  Club_Connect
-//
-//  Created by student on 25-04-2024.
-//
 enum ListSection {
     case recommended([ListItem])
     case eventsThisWeek([ListItem])
@@ -21,19 +15,18 @@ enum ListSection {
         }
     }
         
-        var count: Int {
-            return items.count
-        }
+    var count: Int {
+        return items.count
+    }
         
-        var title: String {
-            switch self {
-            case .recommended:
-                return "Recommended"
-            case .eventsThisWeek:
-                return "\n\nEvents This Week"
-            case .recClubs:
-                return "\n\n\nYou May Like"
-            }
+    var title: String {
+        switch self {
+        case .recommended:
+            return "Recommended"
+        case .eventsThisWeek:
+            return "\n\nEvents This Week"
+        case .recClubs:
+            return "\n\n\nYou May Like"
         }
-    
+    }
 }
